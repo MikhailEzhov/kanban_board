@@ -8,7 +8,7 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ authorizedUser }) => {
   return (
-    <Navbar bg="primary" variant="dark">
+    <Navbar style={{ background: '#0067a2' }} variant="dark">
       <Container>
         <Navbar.Brand href="#">kanban board</Navbar.Brand>
         <Navbar.Text className="justify-content-end">
