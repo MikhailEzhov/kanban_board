@@ -1,4 +1,4 @@
-const kanbanData = [
+const initialData = [
   {
     id: '1',
     title: 'TODO',
@@ -115,4 +115,4 @@ const kanbanData = [
   },
 ];
 
-export default kanbanData;
+export default initialData;

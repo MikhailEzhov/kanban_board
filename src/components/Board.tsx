@@ -4,15 +4,23 @@ import { ThreeDots } from 'react-bootstrap-icons';
 import { IColumn } from '../types/types';
 import ModalEditColumn from './ModalEditColumn';
 import Task from './Task';
-import kanbanData from '../kanbanData';
+import initialData from '../initialData';
 
 const Board: React.FC = () => {
-  const [columns, setСolumns] = useState<IColumn[]>(kanbanData);
+  const [columns, setСolumns] = useState<IColumn[]>(
+    // @ts-ignore
+    JSON.parse(localStorage.getItem('data')) || initialData
+  );
   const [indexColumn, setIndexColumn] = useState<string | number>('');
 
   const setIndexColumnById = (idColumn: string) => {
     const columnIndex = columns.findIndex((column) => column.id === idColumn);
     setIndexColumn(columnIndex);
+  };
+
+  const saveColumns = (newColumns: IColumn[]) => {
+    localStorage.setItem('data', JSON.stringify(newColumns));
+    setСolumns(newColumns);
   };
 
   const removeTask = (idColumn: string, idTask: string) => {
@@ -22,7 +30,7 @@ const Board: React.FC = () => {
     );
     const newColumns = [...columns];
     newColumns[columnIndex].tasks.splice(taskIndex, 1);
-    setСolumns(newColumns);
+    saveColumns(newColumns);
   };
 
   const incrementTask = (idColumn: string, idTask: string) => {
@@ -34,7 +42,7 @@ const Board: React.FC = () => {
     const copyTask = columns[columnIndex].tasks[taskIndex];
     newColumns[columnIndex].tasks.splice(taskIndex, 1);
     newColumns[columnIndex + 1].tasks.push(copyTask);
-    setСolumns(newColumns);
+    saveColumns(newColumns);
   };
 
   const decrementTask = (idColumn: string, idTask: string) => {
@@ -46,7 +54,7 @@ const Board: React.FC = () => {
     const copyTask = columns[columnIndex].tasks[taskIndex];
     newColumns[columnIndex].tasks.splice(taskIndex, 1);
     newColumns[columnIndex - 1].tasks.push(copyTask);
-    setСolumns(newColumns);
+    saveColumns(newColumns);
   };
 
   const firstColumn = columns[0].id;
@@ -58,7 +66,7 @@ const Board: React.FC = () => {
         <Row className="mt-3">
           {columns.map((column) => (
             <Col
-              style={{ background: '#e3e4e6' }}
+              style={{ background: '#e3e4e6', height: 'min-content' }}
               className="rounded-1 m-2 p-2"
               key={column.id}
             >
@@ -95,7 +103,7 @@ const Board: React.FC = () => {
         indexColumn={indexColumn}
         setIndexColumn={setIndexColumn}
         columns={columns}
-        setСolumns={setСolumns}
+        saveColumns={saveColumns}
       />
     </>
   );

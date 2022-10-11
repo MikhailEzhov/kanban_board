@@ -6,14 +6,14 @@ interface ModalEditColumnProps {
   indexColumn: string | number;
   setIndexColumn: (arg: string | number) => void;
   columns: IColumn[];
-  setСolumns: (arg: IColumn[]) => void;
+  saveColumns: (arg: IColumn[]) => void;
 }
 
 const ModalEditColumn: React.FC<ModalEditColumnProps> = ({
   indexColumn,
   setIndexColumn,
   columns,
-  setСolumns,
+  saveColumns,
 }) => {
   const [columnTitle, setColumnTitle] = useState<string>('');
 
@@ -24,7 +24,7 @@ const ModalEditColumn: React.FC<ModalEditColumnProps> = ({
   const renameColumn = () => {
     const newColumns = [...columns];
     newColumns[+indexColumn].title = columnTitle;
-    setСolumns(newColumns);
+    saveColumns(newColumns);
   };
 
   return (
