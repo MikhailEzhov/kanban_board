@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { IBoard } from '../types/types';
+import { IAuthorizedUser, IBoard } from '../types/types';
 import initialData from '../initialData';
 import Column from './Column';
 
-const Board: React.FC = () => {
+interface BoardProps {
+  authorizedUser: IAuthorizedUser;
+}
+
+const Board: React.FC<BoardProps> = ({ authorizedUser }) => {
   const [board, setBoard] = useState<IBoard>(
     // @ts-ignore
     JSON.parse(localStorage.getItem('board')) || initialData
@@ -24,6 +28,7 @@ const Board: React.FC = () => {
             column={column}
             board={board}
             saveBoard={saveBoard}
+            authorizedUser={authorizedUser}
           />
         ))}
       </Row>

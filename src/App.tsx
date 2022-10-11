@@ -23,7 +23,7 @@ const App: React.FC = () => {
   return authorizedUser ? (
     <>
       <NavBar authorizedUser={authorizedUser} />
-      <Board />
+      <Board authorizedUser={authorizedUser} />
     </>
   ) : (
     <UserRegistration setUserFromLocalStorage={setUserFromLocalStorage} />

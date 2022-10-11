@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
-import { IBoard, IColumn } from '../types/types';
+import { IAuthorizedUser, IBoard, IColumn } from '../types/types';
+import ColumnFooter from './ColumnFooter';
 import ColumnHeader from './ColumnHeader';
 import Task from './Task';
 
@@ -8,9 +9,15 @@ interface ColumnProps {
   column: IColumn;
   board: IBoard;
   saveBoard: (newBoard: IBoard) => void;
+  authorizedUser: IAuthorizedUser;
 }
 
-const Column: React.FC<ColumnProps> = ({ column, board, saveBoard }) => {
+const Column: React.FC<ColumnProps> = ({
+  column,
+  board,
+  saveBoard,
+  authorizedUser,
+}) => {
   const firstСolumnId = board[0].id;
   const lastСolumnId = board[board.length - 1].id;
 
@@ -32,6 +39,13 @@ const Column: React.FC<ColumnProps> = ({ column, board, saveBoard }) => {
           saveBoard={saveBoard}
         />
       ))}
+
+      <ColumnFooter
+        columnId={column.id}
+        authorizedUser={authorizedUser}
+        board={board}
+        saveBoard={saveBoard}
+      />
     </Col>
   );
 };
