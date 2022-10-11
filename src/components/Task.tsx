@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Button, ButtonGroup } from 'react-bootstrap';
-import { CaretLeft, CaretRight } from 'react-bootstrap-icons';
+import { CaretLeft, CaretRight, Chat } from 'react-bootstrap-icons';
 import { IBoard, ITask } from '../types/types';
 
 interface TaskProps {
@@ -64,6 +64,13 @@ const Task: React.FC<TaskProps> = (props) => {
               <CaretRight />
             </Button>
           </ButtonGroup>
+
+          {task.comments.length ? (
+            <div>
+              <Chat />
+              <span> {task.comments.length}</span>
+            </div>
+          ) : null}
         </div>
       </Card.Body>
     </Card>
