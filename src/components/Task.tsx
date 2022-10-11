@@ -1,27 +1,45 @@
 import React from 'react';
 import { Card, Button, ButtonGroup } from 'react-bootstrap';
 import { CaretLeft, CaretRight } from 'react-bootstrap-icons';
-import { ITask } from '../types/types';
+import { IBoard, ITask } from '../types/types';
 
 interface TaskProps {
   task: ITask;
+  firstСolumnId: string;
+  lastСolumnId: string;
   columnId: string;
-  firstColumn: string;
-  lastColumn: string;
-  removeTask: (idColumn: string, idTask: string) => void;
-  incrementTask: (idColumn: string, idTask: string) => void;
-  decrementTask: (idColumn: string, idTask: string) => void;
+  board: IBoard;
+  saveBoard: (newBoard: IBoard) => void;
 }
 
-const Task: React.FC<TaskProps> = ({
-  task,
-  columnId,
-  firstColumn,
-  lastColumn,
-  removeTask,
-  incrementTask,
-  decrementTask,
-}) => {
+const Task: React.FC<TaskProps> = (props) => {
+  const { task, firstСolumnId, lastСolumnId, columnId, board, saveBoard } =
+    props;
+
+  const incrementTask = (taskId: string) => {
+    const columnIndex = board.findIndex((column) => column.id === columnId);
+    const taskIndex = board[columnIndex].tasks.findIndex(
+      (_task) => _task.id === taskId
+    );
+    const newBoard = [...board];
+    const copyTask = board[columnIndex].tasks[taskIndex];
+    newBoard[columnIndex].tasks.splice(taskIndex, 1);
+    newBoard[columnIndex + 1].tasks.push(copyTask);
+    saveBoard(newBoard);
+  };
+
+  const decrementTask = (taskId: string) => {
+    const columnIndex = board.findIndex((column) => column.id === columnId);
+    const taskIndex = board[columnIndex].tasks.findIndex(
+      (_task) => _task.id === taskId
+    );
+    const newBoard = [...board];
+    const copyTask = board[columnIndex].tasks[taskIndex];
+    newBoard[columnIndex].tasks.splice(taskIndex, 1);
+    newBoard[columnIndex - 1].tasks.push(copyTask);
+    saveBoard(newBoard);
+  };
+
   return (
     <Card className="bg-light border mt-2">
       <Card.Body>
@@ -32,26 +50,18 @@ const Task: React.FC<TaskProps> = ({
             <Button
               variant="outline-secondary"
               size="sm"
-              disabled={columnId === firstColumn}
-              onClick={() => decrementTask(columnId, task.id)}
+              disabled={columnId === firstСolumnId}
+              onClick={() => decrementTask(task.id)}
             >
               <CaretLeft />
             </Button>
             <Button
               variant="outline-secondary"
               size="sm"
-              disabled={columnId === lastColumn}
-              onClick={() => incrementTask(columnId, task.id)}
+              disabled={columnId === lastСolumnId}
+              onClick={() => incrementTask(task.id)}
             >
               <CaretRight />
-            </Button>
-
-            <Button
-              variant="outline-secondary"
-              size="sm"
-              onClick={() => removeTask(columnId, task.id)}
-            >
-              x
             </Button>
           </ButtonGroup>
         </div>

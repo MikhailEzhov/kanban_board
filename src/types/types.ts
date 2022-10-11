@@ -3,6 +3,8 @@ export interface IAuthorizedUser {
   userId: string;
 }
 
+export type IBoard = IColumn[];
+
 export interface IColumn {
   id: string;
   title: string;
