@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
 import { ThreeDots } from 'react-bootstrap-icons';
-import { IBoard, IColumn } from '../types/types';
+import { IColumn } from '../types/types';
 import EditColumn from './EditColumn';
 
 interface ColumnHeaderProps {
   column: IColumn;
-  board: IBoard;
-  saveBoard: (newBoard: IBoard) => void;
 }
 
-const ColumnHeader: React.FC<ColumnHeaderProps> = ({
-  column,
-  board,
-  saveBoard,
-}) => {
+const ColumnHeader: React.FC<ColumnHeaderProps> = ({ column }) => {
   const [showEditColumn, setShowEditColumn] = useState<boolean>(false);
 
   return (
@@ -35,8 +29,6 @@ const ColumnHeader: React.FC<ColumnHeaderProps> = ({
         setShowEditColumn={setShowEditColumn}
         columnId={column.id}
         columnTitle={column.title}
-        board={board}
-        saveBoard={saveBoard}
       />
     </>
   );

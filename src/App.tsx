@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Board from './components/Board';
 import NavBar from './components/Navbar';
 import UserRegistration from './components/UserRegistration';
 import { IAuthorizedUser } from './types/types';
+import AuthUserContext from './context/AuthUserContext';
 
 const App: React.FC = () => {
   const [authorizedUser, setAuthorizedUser] = useState<IAuthorizedUser | null>(
@@ -20,11 +21,18 @@ const App: React.FC = () => {
     }
   }, []);
 
+  const value = useMemo(
+    () => ({
+      authorizedUser,
+    }),
+    [authorizedUser]
+  );
+
   return authorizedUser ? (
-    <>
-      <NavBar authorizedUser={authorizedUser} />
-      <Board authorizedUser={authorizedUser} />
-    </>
+    <AuthUserContext.Provider value={value}>
+      <NavBar />
+      <Board />
+    </AuthUserContext.Provider>
   ) : (
     <UserRegistration setUserFromLocalStorage={setUserFromLocalStorage} />
   );

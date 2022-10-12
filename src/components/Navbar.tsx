@@ -1,18 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Container, Navbar } from 'react-bootstrap';
-import { IAuthorizedUser } from '../types/types';
+import AuthUserContext from '../context/AuthUserContext';
 
-interface NavBarProps {
-  authorizedUser: IAuthorizedUser;
-}
+const NavBar: React.FC = () => {
+  const { authorizedUser } = useContext(AuthUserContext);
 
-const NavBar: React.FC<NavBarProps> = ({ authorizedUser }) => {
   return (
     <Navbar style={{ background: '#0067a2' }} variant="dark">
       <Container>
         <Navbar.Brand href="#">kanban board</Navbar.Brand>
         <Navbar.Text className="justify-content-end">
-          user: {authorizedUser.userName}
+          user: {authorizedUser?.userName}
         </Navbar.Text>
       </Container>
     </Navbar>

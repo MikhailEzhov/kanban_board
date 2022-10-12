@@ -15,8 +15,8 @@ export interface ITask {
   id: string;
   title: string;
   description: string;
-  authorId: string;
-  authorName: string;
+  authorId: string | undefined;
+  authorName: string | undefined;
   comments: IComment[];
 }
 

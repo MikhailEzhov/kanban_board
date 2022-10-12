@@ -1,25 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { IBoard } from '../types/types';
+import BoardContext from '../context/BoardContext';
 
 interface EditColumnProps {
   showEditColumn: boolean;
   setShowEditColumn: (arg: boolean) => void;
   columnId: string;
   columnTitle: string;
-  board: IBoard;
-  saveBoard: (newBoard: IBoard) => void;
 }
 
 const EditColumn: React.FC<EditColumnProps> = (props) => {
-  const {
-    showEditColumn,
-    setShowEditColumn,
-    columnId,
-    columnTitle,
-    board,
-    saveBoard,
-  } = props;
+  const { showEditColumn, setShowEditColumn, columnId, columnTitle } = props;
+
+  const { board, saveBoard } = useContext(BoardContext);
 
   const [valueColumnTitle, setValueColumnTitle] = useState<string>(columnTitle);
 

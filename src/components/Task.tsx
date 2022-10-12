@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Card, Button, ButtonGroup } from 'react-bootstrap';
 import { CaretLeft, CaretRight, Chat } from 'react-bootstrap-icons';
-import { IBoard, ITask } from '../types/types';
+import { ITask } from '../types/types';
+import BoardContext from '../context/BoardContext';
 
 interface TaskProps {
   task: ITask;
   firstСolumnId: string;
   lastСolumnId: string;
   columnId: string;
-  board: IBoard;
-  saveBoard: (newBoard: IBoard) => void;
 }
 
 const Task: React.FC<TaskProps> = (props) => {
-  const { task, firstСolumnId, lastСolumnId, columnId, board, saveBoard } =
-    props;
+  const { task, firstСolumnId, lastСolumnId, columnId } = props;
+
+  const { board, saveBoard } = useContext(BoardContext);
 
   const incrementTask = (taskId: string) => {
     const columnIndex = board.findIndex((column) => column.id === columnId);

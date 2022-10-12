@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { IAuthorizedUser, IBoard } from '../types/types';
+import { IBoard } from '../types/types';
 import initialData from '../initialData';
 import Column from './Column';
+import BoardContext from '../context/BoardContext';
 
-interface BoardProps {
-  authorizedUser: IAuthorizedUser;
-}
-
-const Board: React.FC<BoardProps> = ({ authorizedUser }) => {
+const Board: React.FC = () => {
   const [board, setBoard] = useState<IBoard>(
     // @ts-ignore
     JSON.parse(localStorage.getItem('board')) || initialData
@@ -19,20 +16,24 @@ const Board: React.FC<BoardProps> = ({ authorizedUser }) => {
     setBoard(newBoard);
   };
 
+  const value = useMemo(
+    () => ({
+      board,
+      saveBoard,
+    }),
+    [board]
+  );
+
   return (
-    <Container>
-      <Row className="mt-3">
-        {board.map((column) => (
-          <Column
-            key={column.id}
-            column={column}
-            board={board}
-            saveBoard={saveBoard}
-            authorizedUser={authorizedUser}
-          />
-        ))}
-      </Row>
-    </Container>
+    <BoardContext.Provider value={value}>
+      <Container>
+        <Row className="mt-3">
+          {board.map((column) => (
+            <Column key={column.id} column={column} />
+          ))}
+        </Row>
+      </Container>
+    </BoardContext.Provider>
   );
 };
 

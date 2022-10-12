@@ -1,26 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
-import { IAuthorizedUser, IBoard, ITask } from '../types/types';
+import { ITask } from '../types/types';
+import AuthUserContext from '../context/AuthUserContext';
+import BoardContext from '../context/BoardContext';
 
 interface AddTaskProps {
   showAddTask: boolean;
   setShowAddTask: (arg: boolean) => void;
   columnId: string;
-  authorizedUser: IAuthorizedUser;
-  board: IBoard;
-  saveBoard: (newBoard: IBoard) => void;
 }
 
 const AddTask: React.FC<AddTaskProps> = (props) => {
-  const {
-    showAddTask,
-    setShowAddTask,
-    columnId,
-    authorizedUser,
-    board,
-    saveBoard,
-  } = props;
+  const { showAddTask, setShowAddTask, columnId } = props;
+
+  const { board, saveBoard } = useContext(BoardContext);
+  const { authorizedUser } = useContext(AuthUserContext);
 
   const [validated, setValidated] = useState<boolean>(false);
   const [task, setTask] = useState<{ title: string; description: string }>({
@@ -52,8 +47,8 @@ const AddTask: React.FC<AddTaskProps> = (props) => {
       const newTask = {
         ...task,
         id: uuidv4(),
-        authorId: authorizedUser.userId,
-        authorName: authorizedUser.userName,
+        authorId: authorizedUser?.userId,
+        authorName: authorizedUser?.userName,
         comments: [],
       };
       addTask(newTask);
