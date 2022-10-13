@@ -16,9 +16,18 @@ interface TaskDetailsProps {
 const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
   const { showTaskDetails, setShowTaskDetails, task, columnId } = props;
 
-  const { board } = useContext(BoardContext);
+  const { board, saveBoard } = useContext(BoardContext);
 
   const columnIndex = board.findIndex((column) => column.id === columnId);
+
+  const deleteTask = (idTask: string) => {
+    const taskIndex = board[columnIndex].tasks.findIndex(
+      (_task) => _task.id === idTask
+    );
+    const newBoard = [...board];
+    newBoard[columnIndex].tasks.splice(taskIndex, 1);
+    saveBoard(newBoard);
+  };
 
   return (
     <Modal
@@ -28,7 +37,11 @@ const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
       keyboard
     >
       <Modal.Header closeButton>
-        <Button variant="outline-danger" size="sm">
+        <Button
+          variant="outline-danger"
+          size="sm"
+          onClick={() => deleteTask(task.id)}
+        >
           delete
         </Button>
       </Modal.Header>
