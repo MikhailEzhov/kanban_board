@@ -56,15 +56,12 @@ const Task: React.FC<TaskProps> = (props) => {
           <Card.Title>{task.title}</Card.Title>
 
           <div className="d-flex justify-content-between gap-1">
-            <ButtonGroup size="sm">
+            <ButtonGroup size="sm" onClick={(e) => e.stopPropagation()}>
               <Button
                 variant="outline-secondary"
                 size="sm"
                 disabled={columnId === firstСolumnId}
-                onClick={(e) => {
-                  decrementTask(task.id);
-                  e.stopPropagation();
-                }}
+                onClick={() => decrementTask(task.id)}
               >
                 <CaretLeft />
               </Button>
@@ -72,10 +69,7 @@ const Task: React.FC<TaskProps> = (props) => {
                 variant="outline-secondary"
                 size="sm"
                 disabled={columnId === lastСolumnId}
-                onClick={(e) => {
-                  incrementTask(task.id);
-                  e.stopPropagation();
-                }}
+                onClick={() => incrementTask(task.id)}
               >
                 <CaretRight />
               </Button>

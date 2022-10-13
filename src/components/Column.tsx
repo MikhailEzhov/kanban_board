@@ -18,7 +18,11 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
 
   return (
     <Col
-      style={{ background: '#e3e4e6', height: 'min-content' }}
+      style={{
+        background: '#e3e4e6',
+        height: 'min-content',
+        minWidth: '250px',
+      }}
       className="rounded-1 m-2 p-2"
     >
       <ColumnHeader column={column} />
