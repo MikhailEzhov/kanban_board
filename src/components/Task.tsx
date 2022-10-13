@@ -94,6 +94,8 @@ const Task: React.FC<TaskProps> = (props) => {
       <TaskDetails
         showTaskDetails={showTaskDetails}
         setShowTaskDetails={setShowTaskDetails}
+        task={task}
+        columnId={columnId}
       />
     </>
   );

@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { PlusLg, Pen, Trash3 } from 'react-bootstrap-icons';
+import { PlusLg, Pen } from 'react-bootstrap-icons';
+import { ITask } from '../types/types';
+import BoardContext from '../context/BoardContext';
+import Comment from './Comment';
+import TaskDescription from './TaskDescription';
 
 interface TaskDetailsProps {
   showTaskDetails: boolean;
   setShowTaskDetails: (arg: boolean) => void;
+  task: ITask;
+  columnId: string;
 }
 
 const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
-  const { showTaskDetails, setShowTaskDetails } = props;
+  const { showTaskDetails, setShowTaskDetails, task, columnId } = props;
+
+  const { board } = useContext(BoardContext);
+
+  const columnIndex = board.findIndex((column) => column.id === columnId);
 
   return (
     <Modal
@@ -26,36 +36,22 @@ const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
       <Modal.Body>
         <div className="d-flex gap-2 align-items-start justify-content-between border rounded-1 p-1 mb-1">
           <p className="m-0 align-self-center">
-            <b>
-              название карточки Lorem ipsum dolor sit amet, consectetur
-              adipiscing elit, sed do eiusmod tempor incididunt ut labore
-            </b>
+            <b>{task.title}</b>
           </p>
           <Button variant="outline-secondary" size="sm">
             <Pen />
           </Button>
         </div>
 
-        <div className="border rounded-1 p-1 mb-1">column:</div>
-
-        <div className="border rounded-1 p-1 mb-1">author:</div>
-
-        <div className="d-flex gap-2 align-items-start justify-content-between border rounded-1 p-1 mb-1">
-          <p className="m-0 align-self-center">
-            <b>description: </b>
-          </p>
-          <div className="d-flex gap-1 flex-wrap justify-content-end">
-            <Button variant="outline-secondary" size="sm">
-              <PlusLg />
-            </Button>
-            <Button variant="outline-secondary" size="sm">
-              <Pen />
-            </Button>
-            <Button variant="outline-secondary" size="sm">
-              <Trash3 />
-            </Button>
-          </div>
+        <div className="border rounded-1 p-1 mb-1">
+          column: {board[columnIndex].title}
         </div>
+
+        <div className="border rounded-1 p-1 mb-1">
+          author: {task.authorName}
+        </div>
+
+        <TaskDescription task={task} />
 
         <div className="border rounded-1 p-1 mb-1">
           <div className="d-flex gap-2 align-items-center justify-content-between pb-1">
@@ -64,44 +60,9 @@ const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
               <PlusLg />
             </Button>
           </div>
-          <div className="border rounded-1 p-1">
-            <i>автор</i>
-            <div className="d-flex gap-1 align-items-start justify-content-between">
-              <p className="m-0">
-                <small>
-                  описание комментария Lorem ipsum dolor sit amet, consectetur
-                  adipiscing
-                </small>
-              </p>
-              <div className="d-flex gap-1 flex-wrap justify-content-end">
-                <Button variant="outline-secondary" size="sm">
-                  <Pen />
-                </Button>
-                <Button variant="outline-secondary" size="sm">
-                  <Trash3 />
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className="border rounded-1 p-1">
-            <i>автор</i>
-            <div className="d-flex gap-1 align-items-start justify-content-between">
-              <p className="m-0">
-                <small>
-                  описание комментария Lorem ipsum dolor sit amet, consectetur
-                  adipiscing
-                </small>
-              </p>
-              <div className="d-flex gap-1 flex-wrap justify-content-end">
-                <Button variant="outline-secondary" size="sm">
-                  <Pen />
-                </Button>
-                <Button variant="outline-secondary" size="sm">
-                  <Trash3 />
-                </Button>
-              </div>
-            </div>
-          </div>
+          {task.comments.map((comment) => (
+            <Comment key={comment.id} comment={comment} />
+          ))}
         </div>
       </Modal.Body>
     </Modal>
