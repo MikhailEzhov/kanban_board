@@ -64,7 +64,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
           author: {task.authorName}
         </div>
 
-        <TaskDescription task={task} />
+        <TaskDescription task={task} columnIndex={columnIndex} />
 
         <div className="border rounded-1 p-1 mb-1">
           <div className="d-flex gap-2 align-items-center justify-content-between pb-1">
