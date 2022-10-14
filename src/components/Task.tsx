@@ -1,50 +1,54 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import { Card, Button, ButtonGroup } from 'react-bootstrap';
 import { CaretLeft, CaretRight, Chat } from 'react-bootstrap-icons';
 import { ITask } from '../types/types';
 import BoardContext from '../context/BoardContext';
+import ColumnContext from '../context/ColumnContext';
+import TaskContext from '../context/TaskContext';
 import TaskDetails from './TaskDetails';
+import getColumnIndex, { getTaskIndex } from '../utils/utils';
 
 interface TaskProps {
   task: ITask;
-  firstСolumnId: string;
-  lastСolumnId: string;
-  columnId: string;
 }
 
 const Task: React.FC<TaskProps> = (props) => {
-  const { task, firstСolumnId, lastСolumnId, columnId } = props;
+  const { task } = props;
 
   const { board, saveBoard } = useContext(BoardContext);
+  const { columnId } = useContext(ColumnContext);
 
   const [showTaskDetails, setShowTaskDetails] = useState<boolean>(false);
 
-  const incrementTask = (taskId: string) => {
-    const columnIndex = board.findIndex((column) => column.id === columnId);
-    const taskIndex = board[columnIndex].tasks.findIndex(
-      (_task) => _task.id === taskId
-    );
-    const newBoard = [...board];
+  const relocationTask = (taskId: string, direction: string) => {
+    const columnIndex = getColumnIndex(board, columnId);
+    const taskIndex = getTaskIndex(board, columnIndex, task.id);
     const copyTask = board[columnIndex].tasks[taskIndex];
+    const newBoard = [...board];
     newBoard[columnIndex].tasks.splice(taskIndex, 1);
-    newBoard[columnIndex + 1].tasks.push(copyTask);
-    saveBoard(newBoard);
+    if (direction === 'next') {
+      newBoard[columnIndex + 1].tasks.push(copyTask);
+      saveBoard(newBoard);
+    } else {
+      newBoard[columnIndex - 1].tasks.push(copyTask);
+      saveBoard(newBoard);
+    }
   };
 
-  const decrementTask = (taskId: string) => {
-    const columnIndex = board.findIndex((column) => column.id === columnId);
-    const taskIndex = board[columnIndex].tasks.findIndex(
-      (_task) => _task.id === taskId
-    );
-    const newBoard = [...board];
-    const copyTask = board[columnIndex].tasks[taskIndex];
-    newBoard[columnIndex].tasks.splice(taskIndex, 1);
-    newBoard[columnIndex - 1].tasks.push(copyTask);
-    saveBoard(newBoard);
-  };
+  const value = useMemo(
+    () => ({
+      taskId: task.id,
+      taskTitle: task.title,
+      taskDescription: task.description,
+      taskAuthorId: task.authorId,
+      taskAuthorName: task.authorName,
+      taskComments: task.comments,
+    }),
+    [task.comments, task.description, task.id, task.title]
+  );
 
   return (
-    <>
+    <TaskContext.Provider value={value}>
       <Card
         className="bg-light border mt-2"
         onClick={() => setShowTaskDetails(true)}
@@ -60,16 +64,16 @@ const Task: React.FC<TaskProps> = (props) => {
               <Button
                 variant="outline-secondary"
                 size="sm"
-                disabled={columnId === firstСolumnId}
-                onClick={() => decrementTask(task.id)}
+                disabled={columnId === board[0].id}
+                onClick={() => relocationTask(task.id, 'back')}
               >
                 <CaretLeft />
               </Button>
               <Button
                 variant="outline-secondary"
                 size="sm"
-                disabled={columnId === lastСolumnId}
-                onClick={() => incrementTask(task.id)}
+                disabled={columnId === board[board.length - 1].id}
+                onClick={() => relocationTask(task.id, 'next')}
               >
                 <CaretRight />
               </Button>
@@ -88,10 +92,8 @@ const Task: React.FC<TaskProps> = (props) => {
       <TaskDetails
         showTaskDetails={showTaskDetails}
         setShowTaskDetails={setShowTaskDetails}
-        task={task}
-        columnId={columnId}
       />
-    </>
+    </TaskContext.Provider>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IBoard } from '../types/types';
-import initialData from '../initialData';
+import initialData from '../data/initialData';
 import Column from './Column';
 import BoardContext from '../context/BoardContext';
 

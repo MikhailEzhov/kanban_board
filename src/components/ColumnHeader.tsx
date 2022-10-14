@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ThreeDots } from 'react-bootstrap-icons';
-import { IColumn } from '../types/types';
 import EditColumn from './EditColumn';
+import ColumnContext from '../context/ColumnContext';
 
-interface ColumnHeaderProps {
-  column: IColumn;
-}
+const ColumnHeader: React.FC = () => {
+  const { columnTitle } = useContext(ColumnContext);
 
-const ColumnHeader: React.FC<ColumnHeaderProps> = ({ column }) => {
   const [showEditColumn, setShowEditColumn] = useState<boolean>(false);
 
   return (
     <>
       <div className="d-flex justify-content-between">
-        <strong>{column.title}</strong>
+        <strong>{columnTitle}</strong>
         <span
           onClick={() => setShowEditColumn(true)}
           onKeyPress={() => setShowEditColumn(true)}
@@ -27,8 +25,6 @@ const ColumnHeader: React.FC<ColumnHeaderProps> = ({ column }) => {
       <EditColumn
         showEditColumn={showEditColumn}
         setShowEditColumn={setShowEditColumn}
-        columnId={column.id}
-        columnTitle={column.title}
       />
     </>
   );

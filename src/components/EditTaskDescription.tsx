@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { ITask } from '../types/types';
+import TaskContext from '../context/TaskContext';
 
 interface EditTaskDescriptionProps {
   setShowEditTaskDescription: (arg: boolean) => void;
-  task: ITask;
   renameDescription: (newDescription: string) => void;
 }
 
 const EditTaskDescription: React.FC<EditTaskDescriptionProps> = (props) => {
-  const { setShowEditTaskDescription, task, renameDescription } = props;
+  const { setShowEditTaskDescription, renameDescription } = props;
 
-  const [valueTaskDescription, setValueTaskDescription] = useState<string>(
-    task.description
-  );
+  const { taskDescription } = useContext(TaskContext);
+
+  const [valueTaskDescription, setValueTaskDescription] =
+    useState<string>(taskDescription);
 
   return (
     <>

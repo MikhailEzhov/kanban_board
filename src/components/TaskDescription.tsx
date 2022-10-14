@@ -1,41 +1,38 @@
 import React, { useContext, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Pen, PlusLg, Trash3 } from 'react-bootstrap-icons';
-import { ITask } from '../types/types';
 import EditTaskDescription from './EditTaskDescription';
 import BoardContext from '../context/BoardContext';
+import ColumnContext from '../context/ColumnContext';
+import TaskContext from '../context/TaskContext';
+import getColumnIndex, { getTaskIndex } from '../utils/utils';
 
-interface TaskDescriptionProps {
-  task: ITask;
-  columnIndex: number;
-}
-
-const TaskDescription: React.FC<TaskDescriptionProps> = (props) => {
-  const { task, columnIndex } = props;
-
+const TaskDescription: React.FC = () => {
   const { board, saveBoard } = useContext(BoardContext);
+  const { columnId } = useContext(ColumnContext);
+  const { taskDescription, taskId } = useContext(TaskContext);
 
   const [showEditTaskDescription, setShowEditTaskDescription] =
     useState<boolean>(false);
 
-  const taskIndex = board[columnIndex].tasks.findIndex(
-    (_task) => _task.id === task.id
-  );
-
   const renameDescription = (newDescription: string) => {
+    const columnIndex = getColumnIndex(board, columnId);
+    const taskIndex = getTaskIndex(board, columnIndex, taskId);
     const newBoard = [...board];
     newBoard[columnIndex].tasks[taskIndex].description = newDescription;
     saveBoard(newBoard);
   };
 
   const deleteDescription = () => {
+    const columnIndex = getColumnIndex(board, columnId);
+    const taskIndex = getTaskIndex(board, columnIndex, taskId);
     const newBoard = [...board];
     newBoard[columnIndex].tasks[taskIndex].description = '';
     saveBoard(newBoard);
   };
 
   const buttons =
-    task.description.length < 1 ? (
+    taskDescription.length < 1 ? (
       <Button
         variant="outline-secondary"
         size="sm"
@@ -67,7 +64,7 @@ const TaskDescription: React.FC<TaskDescriptionProps> = (props) => {
       <>
         <p className="m-0 align-self-center">
           <b>description: </b>
-          {task.description}
+          {taskDescription}
         </p>
         <div className="d-flex gap-1 flex-wrap justify-content-end">
           {buttons}
@@ -76,7 +73,6 @@ const TaskDescription: React.FC<TaskDescriptionProps> = (props) => {
     ) : (
       <EditTaskDescription
         setShowEditTaskDescription={setShowEditTaskDescription}
-        task={task}
         renameDescription={renameDescription}
       />
     );

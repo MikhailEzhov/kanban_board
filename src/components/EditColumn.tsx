@@ -1,23 +1,25 @@
 import React, { useContext, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import BoardContext from '../context/BoardContext';
+import getColumnIndex from '../utils/utils';
+import ColumnContext from '../context/ColumnContext';
 
 interface EditColumnProps {
   showEditColumn: boolean;
   setShowEditColumn: (arg: boolean) => void;
-  columnId: string;
-  columnTitle: string;
 }
 
 const EditColumn: React.FC<EditColumnProps> = (props) => {
-  const { showEditColumn, setShowEditColumn, columnId, columnTitle } = props;
+  const { showEditColumn, setShowEditColumn } = props;
+
+  const { columnId, columnTitle } = useContext(ColumnContext);
 
   const { board, saveBoard } = useContext(BoardContext);
 
   const [valueColumnTitle, setValueColumnTitle] = useState<string>(columnTitle);
 
   const renameColumn = () => {
-    const columnIndex = board.findIndex((column) => column.id === columnId);
+    const columnIndex = getColumnIndex(board, columnId);
     const newBoard = [...board];
     newBoard[columnIndex].title = valueColumnTitle;
     saveBoard(newBoard);

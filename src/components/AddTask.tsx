@@ -4,18 +4,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { ITask } from '../types/types';
 import AuthUserContext from '../context/AuthUserContext';
 import BoardContext from '../context/BoardContext';
+import ColumnContext from '../context/ColumnContext';
+import getColumnIndex from '../utils/utils';
 
 interface AddTaskProps {
   showAddTask: boolean;
   setShowAddTask: (arg: boolean) => void;
-  columnId: string;
 }
 
 const AddTask: React.FC<AddTaskProps> = (props) => {
-  const { showAddTask, setShowAddTask, columnId } = props;
+  const { showAddTask, setShowAddTask } = props;
 
   const { board, saveBoard } = useContext(BoardContext);
   const { authorizedUser } = useContext(AuthUserContext);
+  const { columnId } = useContext(ColumnContext);
 
   const [validated, setValidated] = useState<boolean>(false);
   const [task, setTask] = useState<{ title: string; description: string }>({
@@ -24,7 +26,7 @@ const AddTask: React.FC<AddTaskProps> = (props) => {
   });
 
   const addTask = (newTask: ITask) => {
-    const columnIndex = board.findIndex((column) => column.id === columnId);
+    const columnIndex = getColumnIndex(board, columnId);
     const newBoard = [...board];
     newBoard[columnIndex].tasks.push(newTask);
     saveBoard(newBoard);

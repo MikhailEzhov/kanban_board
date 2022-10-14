@@ -3,11 +3,7 @@ import { Button } from 'react-bootstrap';
 import { PlusLg } from 'react-bootstrap-icons';
 import AddTask from './AddTask';
 
-interface ColumnFooterProps {
-  columnId: string;
-}
-
-const ColumnFooter: React.FC<ColumnFooterProps> = ({ columnId }) => {
+const ColumnFooter: React.FC = () => {
   const [showAddTask, setShowAddTask] = useState<boolean>(false);
 
   return (
@@ -21,11 +17,7 @@ const ColumnFooter: React.FC<ColumnFooterProps> = ({ columnId }) => {
         <PlusLg />
       </Button>
 
-      <AddTask
-        showAddTask={showAddTask}
-        setShowAddTask={setShowAddTask}
-        columnId={columnId}
-      />
+      <AddTask showAddTask={showAddTask} setShowAddTask={setShowAddTask} />
     </div>
   );
 };
