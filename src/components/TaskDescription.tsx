@@ -18,9 +18,12 @@ const TaskDescription: React.FC = () => {
   const renameDescription = (newDescription: string) => {
     const columnIndex = getColumnIndex(board, columnId);
     const taskIndex = getTaskIndex(board, columnIndex, taskId);
-    const newBoard = [...board];
-    newBoard[columnIndex].tasks[taskIndex].description = newDescription;
-    saveBoard(newBoard);
+    const initialDescription = board[columnIndex].tasks[taskIndex].description;
+    if (initialDescription !== newDescription) {
+      const newBoard = [...board];
+      newBoard[columnIndex].tasks[taskIndex].description = newDescription;
+      saveBoard(newBoard);
+    }
   };
 
   const deleteDescription = () => {
