@@ -22,7 +22,7 @@ export interface ITask {
 
 export interface IComment {
   id: string;
-  authorId: string;
-  authorName: string;
+  authorId: string | undefined;
+  authorName: string | undefined;
   authorText: string;
 }

@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { PlusLg } from 'react-bootstrap-icons';
 import BoardContext from '../context/BoardContext';
 import ColumnContext from '../context/ColumnContext';
 import TaskContext from '../context/TaskContext';
 import getColumnIndex, { getTaskIndex } from '../utils/utils';
-import Comment from './Comment';
+import TaskComments from './TaskComments';
 import TaskDescription from './TaskDescription';
 import TaskTitle from './TaskTitle';
 
@@ -19,7 +18,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
 
   const { board, saveBoard } = useContext(BoardContext);
   const { columnId, columnTitle } = useContext(ColumnContext);
-  const { taskId, taskAuthorName, taskComments } = useContext(TaskContext);
+  const { taskId, taskAuthorName } = useContext(TaskContext);
 
   const deleteTask = (idTask: string) => {
     const columnIndex = getColumnIndex(board, columnId);
@@ -48,26 +47,12 @@ const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
 
       <Modal.Body>
         <TaskTitle />
-
         <div className="border rounded-1 p-1 mb-1">column: {columnTitle}</div>
-
         <div className="border rounded-1 p-1 mb-1">
           author: {taskAuthorName}
         </div>
-
         <TaskDescription />
-
-        <div className="border rounded-1 p-1 mb-1">
-          <div className="d-flex gap-2 align-items-center justify-content-between pb-1">
-            <b>comments: </b>
-            <Button variant="outline-secondary" size="sm">
-              <PlusLg />
-            </Button>
-          </div>
-          {taskComments.map((comment) => (
-            <Comment key={comment.id} comment={comment} />
-          ))}
-        </div>
+        <TaskComments />
       </Modal.Body>
     </Modal>
   );
