@@ -5,12 +5,14 @@ import EditTaskDescription from './EditTaskDescription';
 import BoardContext from '../context/BoardContext';
 import ColumnContext from '../context/ColumnContext';
 import TaskContext from '../context/TaskContext';
+import AuthUserContext from '../context/AuthUserContext';
 import getColumnIndex, { getTaskIndex } from '../utils/utils';
 
 const TaskDescription: React.FC = () => {
   const { board, saveBoard } = useContext(BoardContext);
   const { columnId } = useContext(ColumnContext);
-  const { taskDescription, taskId } = useContext(TaskContext);
+  const { taskDescription, taskId, taskAuthorId } = useContext(TaskContext);
+  const { authorizedUser } = useContext(AuthUserContext);
 
   const [showEditTaskDescription, setShowEditTaskDescription] =
     useState<boolean>(false);
@@ -34,12 +36,16 @@ const TaskDescription: React.FC = () => {
     saveBoard(newBoard);
   };
 
+  const displayButton =
+    taskAuthorId === authorizedUser?.userId ? 'd-inline-block' : 'd-none';
+
   const buttons =
     taskDescription.length < 1 ? (
       <Button
         variant="outline-secondary"
         size="sm"
         onClick={() => setShowEditTaskDescription(true)}
+        className={displayButton}
       >
         <PlusLg />
       </Button>
@@ -49,6 +55,7 @@ const TaskDescription: React.FC = () => {
           variant="outline-secondary"
           size="sm"
           onClick={() => setShowEditTaskDescription(true)}
+          className={displayButton}
         >
           <Pen />
         </Button>
@@ -56,6 +63,7 @@ const TaskDescription: React.FC = () => {
           variant="outline-secondary"
           size="sm"
           onClick={deleteDescription}
+          className={displayButton}
         >
           <Trash3 />
         </Button>
