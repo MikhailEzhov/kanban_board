@@ -19,8 +19,6 @@ const TaskComments: React.FC = () => {
   const [showComponentAddComment, setShowComponentAddComment] =
     useState<boolean>(false);
 
-  // тут добавить/изменить/удалить комментарий
-
   const addComment = (valueComment: string) => {
     if (valueComment.length > 0) {
       const newComment = {
@@ -33,6 +31,33 @@ const TaskComments: React.FC = () => {
       const taskIndex = getTaskIndex(board, columnIndex, taskId);
       const newBoard = [...board];
       newBoard[columnIndex].tasks[taskIndex].comments.push(newComment);
+      saveBoard(newBoard);
+    }
+  };
+
+  const deleteComment = (commentId: string) => {
+    const columnIndex = getColumnIndex(board, columnId);
+    const taskIndex = getTaskIndex(board, columnIndex, taskId);
+    const commentIndex = board[columnIndex].tasks[taskIndex].comments.findIndex(
+      (comment) => comment.id === commentId
+    );
+    const newBoard = [...board];
+    newBoard[columnIndex].tasks[taskIndex].comments.splice(commentIndex, 1);
+    saveBoard(newBoard);
+  };
+
+  const renameComment = (valueComment: string, commentId: string) => {
+    const columnIndex = getColumnIndex(board, columnId);
+    const taskIndex = getTaskIndex(board, columnIndex, taskId);
+    const commentIndex = board[columnIndex].tasks[taskIndex].comments.findIndex(
+      (comment) => comment.id === commentId
+    );
+    const initialComment =
+      board[columnIndex].tasks[taskIndex].comments[commentIndex].authorText;
+    if (initialComment !== valueComment) {
+      const newBoard = [...board];
+      newBoard[columnIndex].tasks[taskIndex].comments[commentIndex].authorText =
+        valueComment;
       saveBoard(newBoard);
     }
   };
@@ -63,7 +88,12 @@ const TaskComments: React.FC = () => {
       ) : null}
 
       {taskComments.map((comment) => (
-        <Comment key={comment.id} comment={comment} />
+        <Comment
+          key={comment.id}
+          comment={comment}
+          renameComment={renameComment}
+          deleteComment={deleteComment}
+        />
       ))}
     </div>
   );
