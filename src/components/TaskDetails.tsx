@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { PlusLg, Pen } from 'react-bootstrap-icons';
+import { PlusLg } from 'react-bootstrap-icons';
 import BoardContext from '../context/BoardContext';
 import ColumnContext from '../context/ColumnContext';
 import TaskContext from '../context/TaskContext';
 import getColumnIndex, { getTaskIndex } from '../utils/utils';
 import Comment from './Comment';
 import TaskDescription from './TaskDescription';
+import TaskTitle from './TaskTitle';
 
 interface TaskDetailsProps {
   showTaskDetails: boolean;
@@ -18,8 +19,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
 
   const { board, saveBoard } = useContext(BoardContext);
   const { columnId, columnTitle } = useContext(ColumnContext);
-  const { taskId, taskTitle, taskAuthorName, taskComments } =
-    useContext(TaskContext);
+  const { taskId, taskAuthorName, taskComments } = useContext(TaskContext);
 
   const deleteTask = (idTask: string) => {
     const columnIndex = getColumnIndex(board, columnId);
@@ -47,14 +47,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = (props) => {
       </Modal.Header>
 
       <Modal.Body>
-        <div className="d-flex gap-2 align-items-start justify-content-between border rounded-1 p-1 mb-1">
-          <p className="m-0 align-self-center">
-            <b>{taskTitle}</b>
-          </p>
-          <Button variant="outline-secondary" size="sm">
-            <Pen />
-          </Button>
-        </div>
+        <TaskTitle />
 
         <div className="border rounded-1 p-1 mb-1">column: {columnTitle}</div>
 
