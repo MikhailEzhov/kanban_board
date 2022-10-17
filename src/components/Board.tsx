@@ -7,8 +7,7 @@ import BoardContext from '../context/BoardContext';
 
 const Board: React.FC = () => {
   const [board, setBoard] = useState<IBoard>(
-    // @ts-ignore
-    JSON.parse(localStorage.getItem('board')) || initialData
+    JSON.parse(`${localStorage.getItem('board')}`) || initialData
   );
 
   const saveBoard = (newBoard: IBoard) => {

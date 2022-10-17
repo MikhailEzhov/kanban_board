@@ -11,8 +11,7 @@ const App: React.FC = () => {
   );
 
   const setUserFromLocalStorage = () => {
-    // @ts-ignore
-    setAuthorizedUser(JSON.parse(localStorage.getItem('user')));
+    setAuthorizedUser(JSON.parse(`${localStorage.getItem('user')}`));
   };
 
   useEffect(() => {
